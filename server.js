@@ -4,7 +4,7 @@ const server= require('http').Server(app)
 const io=require('socket.io')(server)
 const { v4: uuidV4 } = require('uuid') //to generate dynamic url
 app.set('view engine', 'ejs') // to render our front end pages,Files from views directory will be rendered
-app.use(express.static('public')) //we will kee all static front-end files like javascript and css here in this folder. this function makes them accessible
+app.use(express.static('public')) //we will keep all static front-end files like javascript and css here in this folder. this function makes them accessible
 
 
 app.get('/',(req,res)=>{
@@ -16,7 +16,11 @@ app.get('/:room',(req,res)=>{
 })
 io.on('connection', socket=>{
     socket.on('join-room',(roomId,userId)=>{
-        console.log(roomId,userId)
+        socket.join(roomId)
+        socket.to(roomId).emit('user-connected',userId)
+        socket.on('disconnect',()=>{ 
+         socket.to(roomId).emit('user-disconnected',userId)
+        })
 
     })
 })
