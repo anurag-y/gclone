@@ -1,3 +1,43 @@
+console.log("Board Script");
+canvas = document.getElementById("white");
+let test = document.getElementById("test");
+
+canvas.width = 0.98 * window.innerWidth;
+canvas.height = window.innerHeight;
+ let ctx = canvas.getContext("2d");
+
+var p;
+var q;
+let coordinates={m:0,n:0}
+let mouseDown= false;
+
+// window.onmousemove=(e)=>{
+//     p=e.clientX;
+//     q=e.clientY;
+//     coordinates.m=p;
+//     coordinates.n=q;
+//     socket.emit('stroke',coordinates);
+//     // if(mouseDown)
+//     // {
+//     //   ctx.lineTo(p,q);
+//     //   ctx.stroke();
+            
+//     // } 
+// }
+
+
+window.onmousedown=(e)=>{
+    ctx.moveTo(p,q);
+    mouseDown = true;
+}
+
+window.onmouseup=(e)=>{
+    mouseDown = false;
+}
+///////********************************************************************** */
+
+
+
 const socket= io('/')
 const videoGrid = document.getElementById('video-grid') //we place our video in this element
 var msg;
@@ -54,8 +94,24 @@ navigator.mediaDevices.getUserMedia({
                       
 
           }
+       
 
 });
+
+//For board ###################
+
+window.onmousemove=(e)=>{
+    p=e.clientX;
+    q=e.clientY;
+    coordinates.m=p;
+    coordinates.n=q;
+    if(mouseDown){
+        socket.emit('stroke',coordinates);
+    }
+    
+    
+}
+
    
 })
 
@@ -68,6 +124,14 @@ socket.on("createMessage", message => {
     return ;
    })
 
+   socket.on("draw", coordinates => {
+    console.log(coordinates.m,coordinates.n);
+      ctx.lineTo(coordinates.m,coordinates.n);
+      ctx.stroke();
+            
+    
+   })
+
 socket.on('user-connected',userId=>
 {
     console.log('user-connected: '+userId)
@@ -75,6 +139,8 @@ socket.on('user-connected',userId=>
 socket.on('user-disconnected',userId=>{
     if(peers[userId]) peers[userId].close()  //If a peer disconnects remove his video from the screen
 })
+
+
 
 
 function connectToNewUser(userId,stream)
@@ -99,8 +165,7 @@ function addVideoStream(video , stream){
     videoGrid.append(video)
 }
 
-// function send(){
-//     msg=document.getElementById('chat');
-//     console.log(msg.value)
-// }
 
+
+
+//Script For white Board

@@ -76,6 +76,12 @@ io.on('connection', socket=>{
           //send message to the same room
           io.to(roomId).emit('createMessage', message)
       }); 
+      socket.on('stroke', coordinates => {
+        //send message to the same room
+          io.to(roomId).emit('draw', coordinates)
+        //console.log(coordinates.m,coordinates.n);
+        
+    }); 
 
         socket.on('disconnect',()=>{ 
          socket.to(roomId).emit('user-disconnected',userId)
