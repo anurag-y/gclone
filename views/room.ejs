@@ -10,7 +10,7 @@
     <script src="https://unpkg.com/peerjs@1.4.5/dist/peerjs.min.js" defer></script>
     <script src="/socket.io/socket.io.js" defer></script>
     <script src="script.js" defer></script>
-    <script src="board.js" defer></script>
+
     
     <script>
         const ROOM_ID="<%=roomId%>"
@@ -19,11 +19,21 @@
     
 </head>
 <body>
+    
     <div class="header">
         <h1>This our Meeting Room</h1>
     </div>
     <div id="video-grid">      
     </div>  
     <a href="./logout">Logout</a>
+
+ 
+    <div class="chatbox">
+        <input id="chat" type="text">
+    </div>
+    <div class="chat-window">
+        <ul id="messages">
+        </ul>
+    </div>
 </body>
 </html>

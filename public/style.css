@@ -10,3 +10,14 @@ video{
     height: 100%;
     object-fit: cover;
 }
+
+.chat-window{
+    background-color: blanchedalmond;
+    display: block;
+    width: 25vw;
+    
+}
+
+ul{
+    list-style: none;
+}

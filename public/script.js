@@ -1,6 +1,6 @@
 const socket= io('/')
 const videoGrid = document.getElementById('video-grid') //we place our video in this element
-
+var msg;
 //Peer js library helps connect to different users
 const myPeer= new Peer(undefined,{
     host: '/',
@@ -33,9 +33,40 @@ navigator.mediaDevices.getUserMedia({
         setTimeout(connectToNewUser, 1000, userId, stream)
         console.log('User connected: ' + userId)
     })
+
+    const element = document.getElementById("chat");
+    msg=document.getElementById('chat')
+    element.addEventListener("keypress", function(event) {
+        
+        if (event.key === "Enter") {
+            // Cancel the default action, if needed
+            event.preventDefault();
+            event.stopPropagation();
+            //console.log("enter pressed")  
+            if(msg.value.length!=0)
+            {
+             
+             socket.emit('message', msg.value)
+             msg.value='';
+            
+             
+            }
+                      
+
+          }
+
+});
    
 })
 
+socket.on("createMessage", message => {
+    console.log(message)
+    var el = document.getElementById("messages");
+    var node = document.createElement("li");
+    node.innerText=message;
+    el.appendChild(node);
+    return ;
+   })
 
 socket.on('user-connected',userId=>
 {
@@ -67,4 +98,9 @@ function addVideoStream(video , stream){
     })
     videoGrid.append(video)
 }
+
+// function send(){
+//     msg=document.getElementById('chat');
+//     console.log(msg.value)
+// }
 
