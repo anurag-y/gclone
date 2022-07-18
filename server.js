@@ -8,6 +8,30 @@ const cookieSession = require('cookie-session')
 require('./passport-setup')
 const io=require('socket.io')(server)
 const { v4: uuidV4 } = require('uuid') //to generate dynamic url
+var nodemailer = require('nodemailer');
+
+var transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: 'aman.music420@gmail.com',
+    pass: 'ddotwwdocclessre'
+  }
+});
+
+var mailOptions = {
+  from: 'aman.music420@gmail.com',
+  to: 'anuragfzd62@gmail.com',
+  subject: 'Sending Email using Node.js',
+  text: 'That was easy!'
+};
+
+transporter.sendMail(mailOptions, function(error, info){
+  if (error) {
+    console.log(error);
+  } else {
+    console.log('Email sent: ' + info.response);
+  }
+});
 app.set('view engine', 'ejs') // to render our front end pages,Files from views directory will be rendered
 app.use(express.static('public')) //we will keep all static front-end files like javascript and css here in this folder. this function makes them accessible
 app.use(cors())
