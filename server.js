@@ -9,6 +9,7 @@ require('./passport-setup')
 const io=require('socket.io')(server)
 const { v4: uuidV4 } = require('uuid') //to generate dynamic url
 var nodemailer = require('nodemailer');
+const { content } = require('googleapis/build/src/apis/content')
 
 var transporter = nodemailer.createTransport({
   service: 'gmail',
@@ -18,20 +19,7 @@ var transporter = nodemailer.createTransport({
   }
 });
 
-var mailOptions = {
-  from: 'aman.music420@gmail.com',
-  to: 'anuragfzd62@gmail.com',
-  subject: 'Sending Email using Node.js',
-  text: 'That was easy!'
-};
 
-transporter.sendMail(mailOptions, function(error, info){
-  if (error) {
-    console.log(error);
-  } else {
-    console.log('Email sent: ' + info.response);
-  }
-});
 app.set('view engine', 'ejs') // to render our front end pages,Files from views directory will be rendered
 app.use(express.static('public')) //we will keep all static front-end files like javascript and css here in this folder. this function makes them accessible
 app.use(cors())
@@ -106,6 +94,11 @@ io.on('connection', socket=>{
         //console.log(coordinates.m,coordinates.n);
         
     }); 
+      
+      socket.on('mail',content=>{
+        sendnow(content);
+      })
+
 
         socket.on('disconnect',()=>{ 
          socket.to(roomId).emit('user-disconnected',userId)
@@ -115,3 +108,24 @@ io.on('connection', socket=>{
     })
 })
 server.listen('3000')
+
+
+
+
+function sendnow(content)
+{
+  var mailOptions = {
+    from: 'aman.music420@gmail.com',
+    to: content.address,
+    subject: 'Meeting Invitiation',
+    text: content.txt
+  };
+  
+  transporter.sendMail(mailOptions, function(error, info){
+    if (error) {
+      console.log(error);
+    } else {
+      console.log('Email sent: ' + info.response);
+    }
+  });
+}

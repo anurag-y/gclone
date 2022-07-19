@@ -11,21 +11,6 @@ var q;
 let coordinates={m:0,n:0}
 let mouseDown= false;
 
-// window.onmousemove=(e)=>{
-//     p=e.clientX;
-//     q=e.clientY;
-//     coordinates.m=p;
-//     coordinates.n=q;
-//     socket.emit('stroke',coordinates);
-//     // if(mouseDown)
-//     // {
-//     //   ctx.lineTo(p,q);
-//     //   ctx.stroke();
-            
-//     // } 
-// }
-
-
 window.onmousedown=(e)=>{
     ctx.moveTo(p,q);
     mouseDown = true;
@@ -97,6 +82,42 @@ navigator.mediaDevices.getUserMedia({
        
 
 });
+
+////////////////////////////////// ##### For Invite sending ########## ////////////////////////
+
+const inmail = document.getElementById("invite");
+
+inmail.addEventListener("keypress", function(event) {    
+    
+    if (event.key === "Enter") {
+        var mail=document.getElementById('invite').value; 
+        var dummy=document.getElementById('invite');       
+        const content={address: mail, txt: "You are Invited to meeting room: "+ window.location.href}
+       // console.log(content.address),
+        // Cancel the default action, if needed
+        event.preventDefault();
+        event.stopPropagation();
+        if(mail.length!=0)
+        {         
+         socket.emit('mail', content)
+         dummy.value='';
+        
+         
+        }
+                  
+
+      }
+   
+
+});
+
+
+
+
+////////////////////////////////// ##### For Invite sending ########## ////////////////////////
+
+
+
 
 //For board ###################
 

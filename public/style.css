@@ -3,12 +3,18 @@
     display: grid;
     grid-template-columns: repeat(auto-fill,300px);
     grid-auto-rows: 300px;
+    border-color: grey;
+    border-style: double;
+    border-radius: 3px;
 }
 
 video{
     width: 100%;
     height: 100%;
     object-fit: cover;
+    border-style: groove;
+    border-color: black;
+    border-radius: 8px;
 }
 
 .chat-window{
@@ -24,5 +30,7 @@ ul{
 
 .board
 {
-    
+    border-style: groove;
+    border-color: black;
+    border-radius: 8px;
 }
