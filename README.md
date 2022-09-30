@@ -1,4 +1,5 @@
 # Gmeet clone app:
+#How to run:
 1. Download or copy the code in your local machine.
 2. Run command 'npm install' to install required dependencies.
 3. Run command 'nodemon server'
