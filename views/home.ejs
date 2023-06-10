@@ -1,12 +1,40 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>G-Meet Clone Homepage</title>
+  <title>G-Meet Clone - Homepage</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+    }
+    
+    h1 {
+      color: #333;
+    }
+    
+    .button {
+      display: inline-block;
+      padding: 10px 20px;
+      font-size: 18px;
+      border: none;
+      background-color: #4CAF50;
+      color: #fff;
+      text-align: center;
+      text-decoration: none;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    
+    .button:hover {
+      background-color: #45a049;
+    }
+  </style>
 </head>
 <body>
-    <a href="/google">Login</a>
+  <h1>Welcome to G-Meet Clone</h1>
+  <p>Join meetings and connect with others</p>
+  
+  <button class="button" onclick="window.location.href = '/meeting';">Join New Meeting</button>
+  <button class="button" onclick="window.location.href = '/google';">Sign In</button>
 </body>
 </html>
