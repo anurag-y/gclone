@@ -10,6 +10,7 @@ const io=require('socket.io')(server)
 const { v4: uuidV4 } = require('uuid') //to generate dynamic url
 var nodemailer = require('nodemailer');
 const { content } = require('googleapis/build/src/apis/content')
+const { profile } = require('console')
 require('dotenv').config();
 var transporter = nodemailer.createTransport({
   service: 'gmail',
@@ -38,7 +39,7 @@ app.use(cookieSession({
 }
 app.use(passport.initialize());
 app.use(passport.session());
-
+username = "";
 app.get('/',(req,res)=>{
     res.render('home')
 })
@@ -76,6 +77,8 @@ app.get('/google/callback',
   });
 
 app.get('/:room',(req,res)=>{
+    username = req.user.name.givenName;
+    console.log(req.user)
     res.render('room',{roomId: req.params.room})
 })
 io.on('connection', socket=>{
@@ -84,9 +87,10 @@ io.on('connection', socket=>{
         socket.to(roomId).emit('user-connected',userId)
 
         socket.on('message', (message) => {
-          //send message to the same room
-          io.to(roomId).emit('createMessage', message)
-      });
+         const formattedMessage = username + ' : ' +message;
+         console.log(username);
+          io.to(roomId).emit('createMessage', formattedMessage);
+        });
       socket.on('newStroke', (coordinates) => {
         socket.to(roomId).emit('newStroke', coordinates)
       });
