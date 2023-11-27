@@ -21,7 +21,8 @@ video{
     background-color: blanchedalmond;
     display: block;
     width: 25vw;
-    
+    height: 200px; /* Adjust this value as per your requirement */
+    overflow-y: auto; /* This will make the chat window scrollable */
 }
 
 ul{
@@ -30,6 +31,9 @@ ul{
 
 .board
 {
+    /* set margin 0 padding 0 */
+    margin: 0;
+    padding: 0;
     border-style: groove;
     border-color: black;
     border-radius: 8px;

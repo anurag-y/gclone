@@ -10,12 +10,12 @@ const io=require('socket.io')(server)
 const { v4: uuidV4 } = require('uuid') //to generate dynamic url
 var nodemailer = require('nodemailer');
 const { content } = require('googleapis/build/src/apis/content')
-
+require('dotenv').config();
 var transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
-    user: 'aman.music420@gmail.com',
-    pass: 'ddotwwdocclessre'
+    user: process.env.EMAIL,
+    pass: process.env.PASSWORD
   }
 });
 

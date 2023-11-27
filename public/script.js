@@ -1,6 +1,13 @@
 console.log("Board Script");
 canvas = document.getElementById("white");
 let test = document.getElementById("test");
+function scrollToBottom() {
+    window.scrollTo(0, document.body.scrollHeight);
+}
+var chatWindow = document.querySelector('.chat-window');
+function scrollChatToBottom() {
+    chatWindow.scrollTop = chatWindow.scrollHeight;
+}
 
 canvas.width = 0.98 * window.innerWidth;
 canvas.height = window.innerHeight;
@@ -164,6 +171,7 @@ socket.on("createMessage", message => {
     var node = document.createElement("li");
     node.innerText=message;
     el.appendChild(node);
+    scrollChatToBottom()
     return ;
    })
    socket.on("newStroke", coordinates => {
