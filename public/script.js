@@ -10,14 +10,26 @@ var p;
 var q;
 let coordinates={m:0,n:0}
 let mouseDown= false;
+let newStroke = true;
+// window.onmousedown=(e)=>{
+//     ctx.moveTo(p,q);
+//     socket.emit('mousedown',{p,q});
+//     mouseDown = true;
+// }
 
-window.onmousedown=(e)=>{
-    ctx.moveTo(p,q);
+window.onmousedown = (e) => {
+    ctx.beginPath(); // Start a new path for each stroke
+    p = e.clientX;
+    q = e.clientY;
+    coordinates.m = p;
+    coordinates.n = q;
+    ctx.moveTo(p, q);
     mouseDown = true;
-}
+  };
 
 window.onmouseup=(e)=>{
     mouseDown = false;
+    newStroke = true;
 }
 ///////********************************************************************** */
 
@@ -31,6 +43,7 @@ const myPeer= new Peer(undefined,{
     host: '/',
     port:'3001'
 })
+
 myPeer.on('open',id=>{
     socket.emit('join-room',ROOM_ID,id)
 })
@@ -59,6 +72,7 @@ navigator.mediaDevices.getUserMedia({
         console.log('User connected: ' + userId)
     })
 
+
     const element = document.getElementById("chat");
     msg=document.getElementById('chat')
     element.addEventListener("keypress", function(event) {
@@ -69,16 +83,13 @@ navigator.mediaDevices.getUserMedia({
             event.stopPropagation();
             //console.log("enter pressed")  
             if(msg.value.length!=0)
-            {
-             
+            {             
              socket.emit('message', msg.value)
-             msg.value='';
-            
+             msg.value='';         
              
-            }
-                      
+            }                      
 
-          }
+        }
        
 
 });
@@ -87,25 +98,23 @@ navigator.mediaDevices.getUserMedia({
 
 const inmail = document.getElementById("invite");
 
-inmail.addEventListener("keypress", function(event) {    
-    
+inmail.addEventListener("keypress", function(event) {  
+
     if (event.key === "Enter") {
         var mail=document.getElementById('invite').value; 
         var dummy=document.getElementById('invite');       
         const content={address: mail, txt: "You are Invited to meeting room: "+ window.location.href}
-       // console.log(content.address),
-        // Cancel the default action, if needed
         event.preventDefault();
         event.stopPropagation();
         if(mail.length!=0)
         {         
          socket.emit('mail', content)
          dummy.value='';
-        
-         
         }
-                  
-
+        else
+        {
+            alert("Please enter a valid email address");
+        }
       }
    
 
@@ -121,18 +130,31 @@ inmail.addEventListener("keypress", function(event) {
 
 //For board ###################
 
-window.onmousemove=(e)=>{
-    p=e.clientX;
-    q=e.clientY;
-    coordinates.m=p;
-    coordinates.n=q;
-    if(mouseDown){
-        socket.emit('stroke',coordinates);
-    }
+// window.onmousemove=(e)=>{
+//     p=e.clientX;
+//     q=e.clientY;
+//     coordinates.m=p;
+//     coordinates.n=q;
+//     if(mouseDown){
+//         socket.emit('stroke',coordinates);
+//     }
     
     
-}
+// }
 
+window.onmousemove = (e) => {
+    p = e.clientX;
+    q = e.clientY;
+    coordinates.m = p;
+    coordinates.n = q;
+    if (mouseDown) {
+        if(newStroke){
+            socket.emit('newStroke', coordinates);
+            newStroke = false;
+        }
+      socket.emit('stroke', coordinates);
+    }
+  };
    
 })
 
@@ -144,14 +166,19 @@ socket.on("createMessage", message => {
     el.appendChild(node);
     return ;
    })
+   socket.on("newStroke", coordinates => {
+    ctx.beginPath();
+    ctx.moveTo(coordinates.m, coordinates.n);
+    });
 
-   socket.on("draw", coordinates => {
-    console.log(coordinates.m,coordinates.n);
-      ctx.lineTo(coordinates.m,coordinates.n);
-      ctx.stroke();
-            
-    
-   })
+
+
+
+   socket.on("draw", (coordinates) => {
+    console.log(coordinates.m, coordinates.n);
+    ctx.lineTo(coordinates.m, coordinates.n);
+    ctx.stroke();
+    });
 
 socket.on('user-connected',userId=>
 {
@@ -160,7 +187,6 @@ socket.on('user-connected',userId=>
 socket.on('user-disconnected',userId=>{
     if(peers[userId]) peers[userId].close()  //If a peer disconnects remove his video from the screen
 })
-
 
 
 
@@ -187,6 +213,3 @@ function addVideoStream(video , stream){
 }
 
 
-
-
-//Script For white Board

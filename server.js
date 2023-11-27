@@ -19,7 +19,6 @@ var transporter = nodemailer.createTransport({
   }
 });
 
-
 app.set('view engine', 'ejs') // to render our front end pages,Files from views directory will be rendered
 app.use(express.static('public')) //we will keep all static front-end files like javascript and css here in this folder. this function makes them accessible
 app.use(cors())
@@ -87,13 +86,15 @@ io.on('connection', socket=>{
         socket.on('message', (message) => {
           //send message to the same room
           io.to(roomId).emit('createMessage', message)
-      }); 
+      });
+      socket.on('newStroke', (coordinates) => {
+        socket.to(roomId).emit('newStroke', coordinates)
+      });
+
+
       socket.on('stroke', coordinates => {
-        //send message to the same room
           io.to(roomId).emit('draw', coordinates)
-        //console.log(coordinates.m,coordinates.n);
-        
-    }); 
+      }); 
       
       socket.on('mail',content=>{
         sendnow(content);
